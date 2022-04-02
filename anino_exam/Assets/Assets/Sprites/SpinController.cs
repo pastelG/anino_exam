@@ -54,21 +54,61 @@ public class SpinController : MonoBehaviour
 
         public void StartRand()
     {
-        
-        enabled = true;
-        GameObject winObj = GameObject.Find("WinsValue");
-        winObj.gameObject.GetComponent<Text>().text = Convert.ToString(0);
-        buttonSpin.gameObject.GetComponent<Button>().interactable = false;
-        btnMinus.gameObject.GetComponent<Button>().interactable = false;
-        btnPlus.gameObject.GetComponent<Button>().interactable = false;
-        textbtnSpin.gameObject.GetComponent<Text>().color = Color.gray;
+        int coinsV;
         GameObject betObj = GameObject.Find("SpinScripts");
         BetValue betScript = betObj.GetComponent<BetValue>();
         betAmt = betScript.betAmount;
-        btnStop.gameObject.SetActive(true);
-        //Invoke("endRand", stopTime);
+        GameObject coinsObj = GameObject.Find("CoinsText");
+        coinsV = Convert.ToInt32(coinsObj.gameObject.GetComponent<Text>().text);
 
+        if (coinsV < betAmt*20 || betAmt == 0)
+        {
+            endRand();
+            
+        }
+        else
+        {
+
+            enabled = true;
+
+            GameObject winObj = GameObject.Find("WinsValue");
+            winObj.gameObject.GetComponent<Text>().text = Convert.ToString(0);
+            buttonSpin.gameObject.GetComponent<Button>().interactable = false;
+            btnMinus.gameObject.GetComponent<Button>().interactable = false;
+            btnPlus.gameObject.GetComponent<Button>().interactable = false;
+            textbtnSpin.gameObject.GetComponent<Text>().color = Color.gray;
+
+            btnStop.gameObject.SetActive(true);
+            //Invoke("endRand", stopTime);
+        }
     }
+    public void updateCoins(GameObject coverObj)
+    {
+        int coinsV;
+        GameObject betObj = GameObject.Find("SpinScripts");
+        BetValue betScript = betObj.GetComponent<BetValue>();
+        betAmt = betScript.betAmount;
+        GameObject coinsObj = GameObject.Find("CoinsText");
+        coinsV = Convert.ToInt32(coinsObj.gameObject.GetComponent<Text>().text);
+        GameObject spinSoundObj = GameObject.Find("AudioSpin");
+        AudioSource spinSound = spinSoundObj.GetComponent<AudioSource>();
+
+        if (coinsV < betAmt * 20 || betAmt == 0)
+        {
+            //set this panel to active true
+            coverObj.gameObject.SetActive(true);
+            spinSound.Stop();
+        }
+        else
+        {
+            //update coins
+            spinSound.Play();
+            coinsV = coinsV - (betAmt * 20);
+            coinsObj.gameObject.GetComponent<Text>().text = Convert.ToString(coinsV);
+
+        }
+    }
+
     IEnumerator StartWait()
     {
 
