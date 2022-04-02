@@ -36,3 +36,7 @@ sysinfo.txt
 # builds
 *.apk
 *.unitypackage
+
+*.iml
+*.ap_
+*.gradle/
